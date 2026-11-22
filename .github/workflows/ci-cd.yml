@@ -1,0 +1,33 @@
+name: TicketDesk CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies & run pytest
+        run: |
+          pip install -r app/requirements.txt
+          pytest -v
+
+      - name: Build Docker Image
+        run: docker build -t ticketdesk:ci ./app
+
+      - name: Terraform Format & Validate
+        uses: hashicorp/setup-terraform@v3
+      - run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate

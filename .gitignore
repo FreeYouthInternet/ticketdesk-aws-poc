@@ -1,0 +1,11 @@
+.env
+venv/
+__pycache__/
+*.db
+uploads/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.pytest_cache/
+lambda/*.zip
